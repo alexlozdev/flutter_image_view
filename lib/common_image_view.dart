@@ -8,6 +8,11 @@ import 'constants.dart';
 
 
 class CommonImageView extends StatelessWidget {
+  /// width
+  final double? width;
+
+  /// height
+  final double? height;
 
   /// image url
   final String imgUrl;
@@ -31,6 +36,8 @@ class CommonImageView extends StatelessWidget {
   /// support rounded image
   const CommonImageView({
     Key? key,
+    this.width,
+    this.height,
     this.imgUrl = '',
     this.imgBuffer,
     this.fit,
@@ -49,6 +56,8 @@ class CommonImageView extends StatelessWidget {
       try {
         if (imgBuffer != null) {
           child = Image.memory(imgBuffer!,
+            width: width,
+            height: height,
             fit: fit,
             filterQuality: filterQuality,
           );
@@ -56,6 +65,8 @@ class CommonImageView extends StatelessWidget {
           // network image url
           child = CachedNetworkImage(
             imageUrl: imgUrl,
+            width: width,
+            height: height,
             placeholder: placeholder ? (context, url) => const CircularProgressIndicator(
               strokeWidth: 2.0,
               color: Constants.focusColor,
@@ -66,18 +77,24 @@ class CommonImageView extends StatelessWidget {
           );
         } else if (imgUrl.startsWith('blob:')) {
           child = Image.network(imgUrl,
+            width: width,
+            height: height,
             fit: fit,
             filterQuality: filterQuality,
           );
         } else if (imgUrl.startsWith('assets')) {
           child = Image.asset(imgUrl,
             fit: fit,
+            width: width,
+            height: height,
             filterQuality: filterQuality,
           );
         } else {
           // local temp image url
           child = Image.file(File(imgUrl),
             fit: fit,
+            width: width,
+            height: height,
             filterQuality: filterQuality,
           );
         }

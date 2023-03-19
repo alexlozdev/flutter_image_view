@@ -45,7 +45,7 @@ class CommonResizeImageView extends StatelessWidget {
     ImageProvider? imageProvider = getImageProvider();
 
     return getClipRect(
-      child: imageProvider != null ? Image(image: ResizeImage(imageProvider!, width: 500)) : errorWidget,
+      child: imageProvider != null ? Image(image: ResizeImage(imageProvider!, width: 600)) : errorWidget,
     );
   }
 
