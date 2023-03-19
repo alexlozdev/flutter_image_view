@@ -103,6 +103,12 @@ class _MyHomePageState extends State<MyHomePage> {
               Expanded(
                 child: CommonImageView(
                   imgBuffer: _resizedBuf,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Expanded(
+                child: CommonResizeImageView(
+                  imgUrl: "assets/test_image.png",
                 ),
               ),
             ],

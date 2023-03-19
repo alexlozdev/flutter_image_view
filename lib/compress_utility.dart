@@ -20,7 +20,11 @@ class CompressUtility {
       if (scale != null) {
         int resizeWidth = (decodeImg.width * scale).round();
         int resizeHeight = (decodeImg.height * scale).round();
-        decode_image.Image resizedImg = decode_image.copyResize(decodeImg!, width: resizeWidth, height: resizeHeight);
+        decode_image.Image resizedImg = decode_image.copyResize(
+            decodeImg!,
+            width: resizeWidth,
+            height: resizeHeight,
+        );
         decodeImg = resizedImg;
       }
 
