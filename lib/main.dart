@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:untitled2/common_image_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -77,9 +78,20 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Container(
-          child: PhotoView(
-            imageProvider: AssetImage("assets/test_image.png"),
-          )
+          child: Column(
+            children: [
+              Expanded(
+                child: PhotoView(
+                  imageProvider: AssetImage("assets/test_image.png"),
+                )
+              ),
+              Expanded(
+                child: CommonImageView(
+                  imgUrl: "assets/test_image.png",
+                ),
+              ),
+            ],
+          ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
