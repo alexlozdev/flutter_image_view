@@ -1,6 +1,12 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:untitled2/common_image_view.dart';
+import 'package:untitled2/common_resize_image_view.dart';
+import 'package:untitled2/compress_utility.dart';
+
+import 'common_image_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -51,15 +57,24 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  Uint8List? _resizedBuf;
 
   void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+
+    final ImagePicker picker = ImagePicker();
+    picker.pickImage(source: ImageSource.gallery,).then((pickedFile) {
+      if (pickedFile != null) {
+        pickedFile.readAsBytes().then((imgBytes) {
+          CompressUtility.compressImageBuffer(CompressImageInfo(imageBuffer: imgBytes, scale: 0.25)).then((value) {
+
+            setState(() {
+              _resizedBuf = value;
+            });
+          });
+
+        });
+
+      }
     });
   }
 
@@ -87,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Expanded(
                 child: CommonImageView(
-                  imgUrl: "assets/test_image.png",
+                  imgBuffer: _resizedBuf,
                 ),
               ),
             ],

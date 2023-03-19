@@ -42,10 +42,52 @@ class CommonImageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    ImageProvider? imageProvider = getImageProvider();
+    Widget? child;
+
+    const FilterQuality filterQuality = FilterQuality.low;
+    if (imgBuffer != null || imgUrl.isNotEmpty) {
+      try {
+        if (imgBuffer != null) {
+          child = Image.memory(imgBuffer!,
+            fit: fit,
+            filterQuality: filterQuality,
+          );
+        } else if (imgUrl.startsWith(Constants.urlHttp)) {
+          // network image url
+          child = CachedNetworkImage(
+            imageUrl: imgUrl,
+            placeholder: placeholder ? (context, url) => const CircularProgressIndicator(
+              strokeWidth: 2.0,
+              color: Constants.focusColor,
+            ) : null,
+            errorWidget: (context, url, error) => errorWidget,
+            fit: fit,
+            filterQuality: filterQuality,
+          );
+        } else if (imgUrl.startsWith('blob:')) {
+          child = Image.network(imgUrl,
+            fit: fit,
+            filterQuality: filterQuality,
+          );
+        } else if (imgUrl.startsWith('assets')) {
+          child = Image.asset(imgUrl,
+            fit: fit,
+            filterQuality: filterQuality,
+          );
+        } else {
+          // local temp image url
+          child = Image.file(File(imgUrl),
+            fit: fit,
+            filterQuality: filterQuality,
+          );
+        }
+      } catch (e) {
+        child = errorWidget;
+      }
+    }
 
     return getClipRect(
-      child: imageProvider != null ? Image(image: ResizeImage(imageProvider!, width: 500)) : errorWidget,
+      child: child ?? errorWidget,
     );
   }
 
@@ -60,31 +102,5 @@ class CommonImageView extends StatelessWidget {
       borderRadius: BorderRadius.all(Radius.circular(radius!)),
       child: child,
     );
-  }
-
-  ImageProvider? getImageProvider() {
-    ImageProvider? child;
-
-    if (imgBuffer == null && imgUrl.isEmpty) {
-      return null;
-    }
-
-    if (imgUrl.startsWith(Constants.urlHttp)) {
-      // network image url
-      child = CachedNetworkImageProvider(imgUrl,
-      );
-    } else if (imgUrl.startsWith('blob:')) {
-      child = NetworkImage(imgUrl,
-      );
-    } else if (imgUrl.startsWith('assets')) {
-      child = AssetImage(imgUrl,
-      );
-    } else {
-      // local temp image url
-      child = FileImage(File(imgUrl),
-      );
-    }
-
-    return child;
   }
 }
