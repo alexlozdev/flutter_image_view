@@ -39,6 +39,8 @@ dependencies:
   cached_network_image: ^3.2.3
   image: ^4.0.15
   image_picker: ^0.8.6+4
+  extended_image: ^7.0.2
+  image_size_getter: ^2.1.2
 
 dev_dependencies:
   flutter_test:
